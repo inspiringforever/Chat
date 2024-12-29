@@ -44,7 +44,10 @@ export default function App() {
       console.log(data);
       updateHistory(data)
      })
-     .catch(error => console.error(error))
+     .catch(error =>{
+      console.log('错误');
+      
+      console.error(error)})
 
   }
 
