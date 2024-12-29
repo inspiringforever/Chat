@@ -14,7 +14,8 @@ export default function App() {
   const [chatHistory, setChatHistory] = useState<{text: string,role: 'user'|'bot'}[]>([])
   const [showChatbot, setShowChatbot] = useState<boolean>(false)
   const chatBodyRef = useRef<HTMLDivElement | null>(null);
-
+  
+  
   const updateHistory = (text: string) => {
     setChatHistory((prev) => [
       ...prev.filter(chat=>chat.text!=='Thinking...'),
@@ -25,19 +26,25 @@ export default function App() {
     ])
   }
   const generateBotResp = async (history: {text: string,role: 'user'|'bot'}[])=>{
+    if (!((import.meta.env.VITE_API_KEY) || (process.env.VITE_API_KEY))){
+      throw new Error('请设置VITE_API_KEY环境变量');
+    }
     const Options = {
       method: 'POST',
       headers: {'Content-Type': 'application/json' },
       body: JSON.stringify({
         text: history[history.length-1].text,
-        key: import.meta.env.VITE_API_KEY
+        key: import.meta.env.VITE_API_KEY || process.env.VITE_API_KEY
       })
     };
     console.log(Options.body);
     
     fetch('https://aiapi.sishuic.us.kg/api', Options)
      .then(response => {
+      console.log(`process当前key: ${import.meta.env.VITE_API_KEY || process.env.VITE_API_KEY}`);
+      
       console.log(response);
+      if (!response.ok) return '请求失败'
       return response.json()
     })
      .then((data: string) => {
