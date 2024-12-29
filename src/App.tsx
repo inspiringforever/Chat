@@ -29,35 +29,28 @@ export default function App() {
     if (!((import.meta.env.VITE_API_KEY) || (process.env.VITE_API_KEY))){
       throw new Error('请设置VITE_API_KEY环境变量');
     }
-    const Options = {
+    
+    const Options ={
       method: 'POST',
-      headers: {'Content-Type': 'application/json' },
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         text: history[history.length-1].text,
         key: import.meta.env.VITE_API_KEY || process.env.VITE_API_KEY
       })
-    };
+    }
     console.log(Options.body);
-    
-    fetch('https://aiapi.sishuic.us.kg/api', Options)
-     .then(response => {
-      console.log(`process当前key: ${import.meta.env.VITE_API_KEY || process.env.VITE_API_KEY}`);
-      
-      console.log(response);
-      if (!response.ok) return '请求失败'
-      return response.json()
+
+    fetch(import.meta.env.VITE_PROXY_URL || process.env.VITE_PROXY_URL, Options)
+    .then(response => response.json())
+    .then((data:string) => {
+      console.log(data); // 打印响应内
+      updateHistory(data);
     })
-     .then((data: string) => {
-      console.log(data);
-      updateHistory(data)
-     })
-     .catch(error =>{
-      console.log('错误');
-      
-      console.error(error)})
-
+    .catch(error => {
+        console.error('Error:', error); // 捕获并打印错误
+    });
   }
-
+  
   useEffect(()=>{
     chatBodyRef.current!.scrollTo({
       top:chatBodyRef.current!.scrollHeight!,
