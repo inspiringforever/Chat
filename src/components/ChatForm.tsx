@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import {Chat} from './Types'
+import Chat from './Types'
 
 
 

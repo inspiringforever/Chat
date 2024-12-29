@@ -1,6 +1,6 @@
 import { ChatForm } from './components/ChatForm'
 import { ChatMessage } from './components/ChatMessage'
-import {Chat} from './components/Types'
+import Chat from './components/Types'
 import RobotIcon from './components/RobotIcon'
 import { useEffect, useState,useRef } from'react'
 
