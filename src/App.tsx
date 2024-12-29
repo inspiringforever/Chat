@@ -1,12 +1,17 @@
 import { ChatForm } from './components/ChatForm'
 import { ChatMessage } from './components/ChatMessage'
-import Chat from './components/Types'
-import RobotIcon from './components/RobotIcon'
+
+import {
+  Robot,
+  Close,
+  Mode_comment,
+  Keyboard_arrow_down
+} from './components/Icons'
 import { useEffect, useState,useRef } from'react'
 
 
 export default function App() {
-  const [chatHistory, setChatHistory] = useState<Chat[]>([])
+  const [chatHistory, setChatHistory] = useState<{text: string,role: 'user'|'bot'}[]>([])
   const [showChatbot, setShowChatbot] = useState<boolean>(false)
   const chatBodyRef = useRef<HTMLDivElement | null>(null);
 
@@ -19,7 +24,7 @@ export default function App() {
       }
     ])
   }
-  const generateBotResp = async (history: Chat[])=>{
+  const generateBotResp = async (history: {text: string,role: 'user'|'bot'}[])=>{
     const Options = {
       method: 'POST',
       headers: {'Content-Type': 'application/json' },
@@ -52,32 +57,32 @@ export default function App() {
   return (
     <main className={showChatbot?'show-chatbot':''}>
       <button onClick={() => setShowChatbot(prev=>!prev)} id="toggler">
-        <span className="material-symbols-rounded">
-          mode_comment
+        <span >
+          <Mode_comment/>
         </span>
-        <span className="material-symbols-rounded">
-          close
+        <span >
+          <Close/>
         </span>
       </button>
       <div className="chat_popup">
         <div className="header">
           <div className="info">
-            <RobotIcon />
+            <Robot />
             <h2 className="logo-text">Chatbot</h2>
           </div>
-          <button onClick={() => setShowChatbot(prev=>!prev)} className="material-symbols-rounded">
-            keyboard_arrow_down
+          <button onClick={() => setShowChatbot(prev=>!prev)}>
+            <Keyboard_arrow_down/>
           </button>
         </div>
         <div ref={chatBodyRef} className="body">
           <div className="message bot-message">
-          <RobotIcon />
+          <Robot />
           <p className='message-text'>
             Hello, how can I help you?<br/>
             I am a chatbot created by a developer.
           </p>
           </div>
-          {chatHistory.map((chat: Chat, i: number) => (
+          {chatHistory.map((chat,i: number) => (
             <ChatMessage chat={chat} key={i} />
           ))}
         </div>

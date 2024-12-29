@@ -1,10 +1,10 @@
-import RobotIcon from './RobotIcon'
-import Chat from './Types'
+import {Robot} from './Icons'
 
-export const ChatMessage = ({chat}:{chat:Chat}) => {
+
+export const ChatMessage = ({chat}:{chat:{text: string,role: 'user'|'bot'}}) => {
   return (
     <div className={`message ${chat.role}-message`}>
-      {chat.role==='bot' && <RobotIcon/>}
+      {chat.role==='bot' && <Robot/>}
       <p className='message-text'>
         {chat.text}
       </p>
